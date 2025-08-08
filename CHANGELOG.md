@@ -50,7 +50,134 @@
 
 ## [v12.0.3](https://github.com/laravel/laravel/compare/v12.0.2...v12.0.3) - 2025-03-17
 
-* Remove reverted change from CHANGELOG.md by [@AJenbo](https://github.com/AJenbo) in https://github.com/laravel/laravel/pull/6565
+* Remove reverted change from # Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [1.0.0] - 2025-08-08
+
+### Added
+- **Database Schema**: Complete database structure with Authors, Books, BookCategories, and Ratings tables
+- **Book Management System**: 
+  - Books listing with pagination (10-100 items per page)
+  - Search functionality by book title or author name
+  - Display average rating and total ratings count per book
+  - Books sorted by highest rating first
+- **Author Analytics**:
+  - Top 10 authors based on number of ratings > 5
+  - Author ranking with voter count display
+- **Rating System**:
+  - Form to submit ratings for books (1-10 scale)
+  - Validation to ensure book belongs to selected author
+  - Rating storage and aggregation
+- **Data Seeding**:
+  - 1,000 authors with random names
+  - 3,000 book categories
+  - 100,000 books with random titles
+  - 500,000 ratings with random scores
+  - Chunked seeding to prevent memory issues
+- **Models & Relationships**:
+  - Author model with books relationship
+  - Book model with author, category, and ratings relationships
+  - Rating model with book relationship
+  - BookCategory model for book categorization
+- **Controllers**:
+  - BookController for listing and search
+  - AuthorController for top authors display
+  - RatingController for rating submission
+- **Views**:
+  - Books index page with search and pagination
+  - Top authors page
+  - Rating creation form
+- **Routes**:
+  - GET / - Books listing (homepage)
+  - GET /authors/top - Top 10 authors
+  - GET /ratings/create - Rating form
+  - POST /ratings - Submit rating
+- **Database Factories**:
+  - AuthorFactory for generating test authors
+  - BookFactory for generating test books
+  - BookCategoryFactory for generating categories
+  - RatingFactory for generating test ratings
+- **Performance Optimizations**:
+  - Eager loading to prevent N+1 queries
+  - Database relationships with proper foreign keys
+  - Chunked data seeding for large datasets
+- **Documentation**:
+  - Comprehensive README.md
+  - API documentation
+  - Development guide
+  - Installation instructions
+
+### Technical Details
+- **Framework**: Laravel 12.x
+- **PHP Version**: 8.2+
+- **Database**: SQLite
+- **Template Engine**: Blade
+- **ORM**: Eloquent
+
+### Database Statistics
+- 1,000 Authors
+- 3,000 Book Categories  
+- 100,000 Books
+- 500,000 Ratings
+
+### Features Implemented
+1. **Homepage (Books List)**
+   - Pagination with configurable items per page
+   - Search by book title or author name
+   - Display of average ratings and total review counts
+   - Sorting by rating quality
+
+2. **Top Authors Page**
+   - Query optimization for top 10 authors
+   - Based on ratings greater than 5
+   - Shows voter count for each author
+
+3. **Rating Submission**
+   - Form with author and book selection
+   - Rating validation (1-10 range)
+   - Cross-validation (book must belong to author)
+
+### Performance Considerations
+- Implemented eager loading for relationships
+- Used pagination to handle large datasets
+- Chunked seeding to prevent memory exhaustion
+- Optimized queries with proper indexing
+
+### Code Quality
+- PSR-12 coding standards
+- Proper separation of concerns
+- Comprehensive validation
+- Error handling for edge cases
+
+---
+
+## Future Enhancements
+
+### Planned Features
+- [ ] REST API with JSON responses
+- [ ] User authentication system
+- [ ] Book reviews with text comments
+- [ ] Advanced search filters
+- [ ] Recommendation system
+- [ ] Caching for improved performance
+- [ ] Rate limiting for API endpoints
+- [ ] Unit and feature test coverage
+- [ ] Docker containerization
+- [ ] Admin panel for content management
+
+### Technical Improvements
+- [ ] Database query optimization with indexes
+- [ ] Implementation of caching strategies
+- [ ] API versioning
+- [ ] Automated testing pipeline
+- [ ] Code coverage reporting
+- [ ] Performance monitoring
+- [ ] Logging and monitoring systems.md by [@AJenbo](https://github.com/AJenbo) in https://github.com/laravel/laravel/pull/6565
 * Improves clarity in app.css file by [@AhmedAlaa4611](https://github.com/AhmedAlaa4611) in https://github.com/laravel/laravel/pull/6569
 * [12.x] Refactor: Structural improvement for clarity by [@AhmedAlaa4611](https://github.com/AhmedAlaa4611) in https://github.com/laravel/laravel/pull/6574
 * Bump axios from 1.7.9 to 1.8.2 - Vulnerability patch by [@abdel-aouby](https://github.com/abdel-aouby) in https://github.com/laravel/laravel/pull/6572

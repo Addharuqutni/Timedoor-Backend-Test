@@ -1,61 +1,124 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Timedoor Backend Test
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi backend Laravel untuk mengelola sistem perpustakaan digital dengan fitur rating buku dan analisis penulis terbaik.
 
-## About Laravel
+## Deskripsi Proyek
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Sistem ini adalah aplikasi manajemen perpustakaan yang memungkinkan pengguna untuk:
+- Melihat daftar buku dengan sistem pencarian dan pagination
+- Memberikan rating untuk buku (skala 1-10)
+- Melihat top 10 penulis berdasarkan rating tinggi (>5)
+- Mengelola data buku, penulis, dan kategori buku
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Teknologi yang Digunakan
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Laravel 12.x** - Framework PHP untuk backend
+- **PHP 8.2+** - Bahasa pemrograman utama
+- **Mysql** - Database untuk penyimpanan data
+- **Blade Templates** - Template engine untuk frontend
+- **Eloquent ORM** - Object-Relational Mapping
+- **Laravel Factories & Seeders** - Untuk generate data dummy
 
-## Learning Laravel
+## Struktur Database
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+### Tabel `authors`
+- `id` (Primary Key)
+- `name` (String) - Nama penulis
+- `created_at`, `updated_at`
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+### Tabel `book_categories`
+- `id` (Primary Key)  
+- `name` (String) - Nama kategori buku
+- `created_at`, `updated_at`
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Tabel `books`
+- `id` (Primary Key)
+- `title` (String) - Judul buku
+- `author_id` (Foreign Key) - Referensi ke tabel authors
+- `book_category_id` (Foreign Key) - Referensi ke tabel book_categories
+- `created_at`, `updated_at`
 
-## Laravel Sponsors
+### Tabel `ratings`
+- `id` (Primary Key)
+- `book_id` (Foreign Key) - Referensi ke tabel books
+- `rating` (TinyInteger) - Rating 1-10
+- `created_at`, `updated_at`
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+## Fitur Utama
 
-### Premium Partners
+### 1. Daftar Buku (Homepage)
+- **Route**: `GET /`
+- **Controller**: `BookController@index`
+- **Fitur**:
+  - Pencarian buku berdasarkan judul atau nama penulis
+  - Pagination dengan opsi 10-100 item per halaman
+  - Menampilkan rata-rata rating dan jumlah rating per buku
+  - Sorting berdasarkan rating tertinggi
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+### 2. Top 10 Penulis
+- **Route**: `GET /authors/top`
+- **Controller**: `AuthorController@top`
+- **Fitur**:
+  - Menampilkan 10 penulis dengan rating terbanyak > 5
+  - Menghitung jumlah voter untuk setiap penulis
 
-## Contributing
+### 3. Sistem Rating
+- **Route**: 
+  - `GET /ratings/create` - Form rating
+  - `POST /ratings` - Submit rating
+- **Controller**: `RatingController`
+- **Fitur**:
+  - Form untuk memilih penulis dan buku
+  - Validasi rating 1-10
+  - Validasi bahwa buku harus sesuai dengan penulis yang dipilih
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+## Data Seeding
 
-## Code of Conduct
+Sistem menggunakan factories untuk generate data dummy:
+- **1,000 Authors** - Penulis dengan nama random
+- **3,000 Book Categories** - Kategori buku
+- **100,000 Books** - Buku dengan judul random, author dan kategori random
+- **500,000 Ratings** - Rating random 1-10 untuk buku
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Data di-seed dalam chunks untuk menghindari memory issues:
+- Books: 10,000 per batch
+- Ratings: 50,000 per batch
 
-## Security Vulnerabilities
+## Penggunaan
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 1. Melihat Daftar Buku
+- Akses homepage di `http://localhost:8000`
+- Gunakan search box untuk mencari buku atau penulis
+- Pilih jumlah item per halaman (10-100)
+- Buku diurutkan berdasarkan rating tertinggi
+
+### 2. Melihat Top Authors
+- Akses `http://localhost:8000/authors/top`
+- Melihat 10 penulis dengan jumlah rating > 5 terbanyak
+
+### 3. Memberikan Rating
+- Akses `http://localhost:8000/ratings/create`
+- Pilih penulis dari dropdown
+- Pilih buku dari penulis tersebut
+- Berikan rating 1-10
+- Submit form
+
+## API Endpoints
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | `/` | Homepage - Daftar buku dengan pagination dan search |
+| GET | `/authors/top` | Top 10 penulis berdasarkan rating |
+| GET | `/ratings/create` | Form untuk memberikan rating |
+| POST | `/ratings` | Submit rating baru |
 
 ## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+This project is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+## Author
+
+**Addharuqutni**
+- GitHub: [@Addharuqutni](https://github.com/Addharuqutni)
+- Repository: [Timedoor-Backend-Test](https://github.com/Addharuqutni/Timedoor-Backend-Test)
+
